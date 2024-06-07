@@ -145,6 +145,7 @@ PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement)
     if (args_assigned < 3) {
       return PREPARE_SYNTAX_ERROR;
     }
+    statement->type = STATEMENT_INSERT;
     return PREPARE_SUCCESS;
   }
   if (strcmp(input_buffer->buffer, "select") == 0) {
