@@ -5,8 +5,8 @@
 #include <stdint.h>
 
 #include "../include/parse.h"
-
-#define TABLE_MAX_PAGES 100
+#include "../include/execution.h"
+#include "../include/db.h"
 
 
 typedef enum {
@@ -14,11 +14,6 @@ typedef enum {
   META_COMMAND_UNRECOGNIZED_COMMAND
 } MetaCommandResult;
 
-
-typedef struct {
-  uint32_t num_rows;
-  void* pages[TABLE_MAX_PAGES];
-} Table;
 
 
 Table* new_table() {
@@ -102,6 +97,15 @@ void DB() {
         }
 
 
+        switch (execute_statement(&statement, table)) {
+        case (EXECUTE_SUCCESS):
+            printf("executed\n");
+            break;
+        case EXECUTE_TABLE_FULL:
+            printf("Error: Table full.\n");
+            break;
+
+        }
 
     }
 }
