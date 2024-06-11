@@ -28,6 +28,10 @@ typedef enum {
   EXECUTE_SUCCESS 
 } ExecuteResult;
 
+void serialize_row(Row* source, void* destination);
+void deserialize_row(void* source, Row* destination);
+
+
 ExecuteResult execute_insert(Statement* statement, Table* table);
 
 ExecuteResult execute_select(Statement* statement, Table* table);
