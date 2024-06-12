@@ -1,8 +1,9 @@
 #ifndef EXEC_H
 #define EXEC_H
 
-#include "db.h"
+// #include "db.h"
 #include "parse.h"
+#include "storage.h"
 
 #define size_of_attribute(Struct, Attribute) sizeof(((Struct*)0)->Attribute)
 
