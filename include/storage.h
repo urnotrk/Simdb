@@ -3,6 +3,8 @@
 
 
 #include <stdint.h>
+#include <stdbool.h>
+
 
 #define TABLE_MAX_PAGES 100
 
@@ -21,7 +23,17 @@ typedef struct {
 } Table;
 
 
+typedef struct {
+  Table* table;
+  uint32_t row_num;
+  bool end_of_table;  // Indicates a position one past the last element
+} Cursor;
+
+
 Table* db_open(const char* filename);
 void db_close(Table* table);
+
+Cursor* table_start(Table* table);
+Cursor* table_end(Table* table);
 
 #endif //STORAGE_H

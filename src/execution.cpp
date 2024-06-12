@@ -1,5 +1,6 @@
 #include "../include/execution.h"
 #include "../include/db.h"
+#include "../include/storage.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
@@ -51,16 +52,22 @@ void* get_page(Pager* pager, uint32_t page_num) {
 }
 
 
-void* row_slot(Table* table, uint32_t row_num) {
+// void* row_slot(Table* table, uint32_t row_num) {
+void* cursor_value(Cursor* cursor) {
+  uint32_t row_num = cursor->row_num;
   uint32_t page_num = row_num / ROWS_PER_PAGE;
-  void* page = get_page(table->pager, page_num);
-  // if (page == NULL) {
-  //   // Allocate memory only when we try to access page
-  //   page = table->pages[page_num] = malloc(PAGE_SIZE);
-  // }
+  void* page = get_page(cursor->table->pager, page_num);
   uint32_t row_offset = row_num % ROWS_PER_PAGE;
   uint32_t byte_offset = row_offset * ROW_SIZE;
   return page + byte_offset;
+}
+
+
+void cursor_advance(Cursor* cursor) {
+  cursor->row_num += 1;
+  if (cursor->row_num >= cursor->table->num_rows) {
+    cursor->end_of_table = true;
+  }
 }
 
 void print_row(Row* row) {
@@ -74,19 +81,24 @@ ExecuteResult execute_insert(Statement* statement, Table* table) {
   }
 
   Row* row_to_insert = &(statement->row_to_insert);
-
-  serialize_row(row_to_insert, row_slot(table, table->num_rows));
+  Cursor* cursor = table_end(table);
+  serialize_row(row_to_insert, cursor_value(cursor));
   table->num_rows += 1;
+  free(cursor);
 
   return EXECUTE_SUCCESS;
 }
 
 ExecuteResult execute_select(Statement* statement, Table* table) {
+  Cursor* cursor = table_start(table);
   Row row;
-  for (uint32_t i = 0; i < table->num_rows; i++) {
-    deserialize_row(row_slot(table, i), &row);
+  while (!(cursor->end_of_table)) {
+    deserialize_row(cursor_value(cursor), &row);
     print_row(&row);
+    cursor_advance(cursor);
   }
+
+  free(cursor);
   return EXECUTE_SUCCESS;
 }
 
