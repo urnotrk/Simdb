@@ -1,21 +1,22 @@
-#include "../include/execution.h"
-#include "../include/db.h"
-#include "../include/storage.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
 
+#include "../include/common.h"
+
 
 void serialize_row(Row* source, void* destination) {
-  memcpy(destination + ID_OFFSET, &(source->id), ID_SIZE);
-  memcpy(destination + USERNAME_OFFSET, &(source->username), USERNAME_SIZE);
-  memcpy(destination + EMAIL_OFFSET, &(source->email), EMAIL_SIZE);
+  char* dest = static_cast<char*>(destination);
+  memcpy(dest + ID_OFFSET, &(source->id), ID_SIZE);
+  memcpy(dest + USERNAME_OFFSET, &(source->username), USERNAME_SIZE);
+  memcpy(dest + EMAIL_OFFSET, &(source->email), EMAIL_SIZE);
 }
 
 void deserialize_row(void* source, Row* destination) {
-  memcpy(&(destination->id), source + ID_OFFSET, ID_SIZE);
-  memcpy(&(destination->username), source + USERNAME_OFFSET, USERNAME_SIZE);
-  memcpy(&(destination->email), source + EMAIL_OFFSET, EMAIL_SIZE);
+  char* sour = static_cast<char*>(source);
+  memcpy(&(destination->id), sour + ID_OFFSET, ID_SIZE);
+  memcpy(&(destination->username), sour + USERNAME_OFFSET, USERNAME_SIZE);
+  memcpy(&(destination->email), sour + EMAIL_OFFSET, EMAIL_SIZE);
 }
 
 //The get_page() method has the logic for handling a cache miss. We assume pages are saved one after the other in the database file: Page 0 at offset 0, page 1 at offset 4096, page 2 at offset 8192, etc. If the requested page lies outside the bounds of the file, we know it should be blank, so we just allocate some memory and return it. The page will be added to the file when we flush the cache to disk later

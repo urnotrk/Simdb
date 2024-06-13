@@ -1,7 +1,3 @@
-#include "../include/storage.h"
-#include "../include/parse.h"
-#include "../include/execution.h"
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +8,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <unistd.h>
+
+#include "../include/common.h"
 
 
 

@@ -9,10 +9,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-#include "../include/parse.h"
-#include "../include/execution.h"
-#include "../include/db.h"
-#include "../include/storage.h"
+#include "../include/common.h"
 
 
 typedef enum {

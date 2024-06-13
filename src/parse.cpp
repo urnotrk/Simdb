@@ -1,7 +1,6 @@
-#include "../include/parse.h"
-#include "../include/db.h"
-
 #include <stdio.h>
+
+#include "../include/common.h"
 
 PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement) {
   if (strncmp(input_buffer->buffer, "insert", 6) == 0) {
