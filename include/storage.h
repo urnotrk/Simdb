@@ -4,9 +4,8 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "constants.h"
 
-
-#define TABLE_MAX_PAGES 100
 
 //The Pager accesses the page cache and the file. 
 //The Table object makes requests for pages through the pager
