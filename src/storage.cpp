@@ -14,27 +14,28 @@
 
 
 uint32_t* leaf_node_num_cells(void* node) {
-  printf("----in leaf node -%d----\n",*((uint32_t*)node + LEAF_NODE_NUM_CELLS_OFFSET));
+  // printf("----in leaf node -%d----\n",*((uint32_t*)node + LEAF_NODE_NUM_CELLS_OFFSET));
   return (uint32_t*)node + LEAF_NODE_NUM_CELLS_OFFSET;
 }
 
 void* leaf_node_cell(void* node, uint32_t cell_num) {
-  printf("----in leaf_node_cell -%d----\n",*(leaf_node_num_cells(node)));
+  // printf("----in leaf_node_cell -%d----\n",*(leaf_node_num_cells(node)));
   return node + LEAF_NODE_HEADER_SIZE + cell_num * LEAF_NODE_CELL_SIZE;
 }
 
 uint32_t* leaf_node_key(void* node, uint32_t cell_num) {
-  printf("----in leaf_node_key -%d----\n",*(leaf_node_num_cells(node)));
+  // printf("----in leaf_node_key -%d----\n",*(leaf_node_num_cells(node)));
   return (uint32_t*)leaf_node_cell(node, cell_num);
 }
 
 void* leaf_node_value(void* node, uint32_t cell_num) {
-  printf("----in leaf_node_value -%d----\n",*(leaf_node_num_cells(node)));
+  // printf("----in leaf_node_value -%d----\n",*(leaf_node_num_cells(node)));
   return leaf_node_cell(node, cell_num) + LEAF_NODE_KEY_SIZE;
 }
 
 void initialize_leaf_node(void* node) { *leaf_node_num_cells(node) = 0; 
-printf("init.\n");}
+// printf("init.\n");
+}
 
 
 

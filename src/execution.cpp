@@ -6,19 +6,19 @@
 
 
 void serialize_row(Row* source, void* destination,void* node) {
-  printf("after4-----%d\n",*(leaf_node_num_cells(node)));
+  // printf("after4-----%d\n",*(leaf_node_num_cells(node)));
 
   // char* dest = static_cast<char*>(destination);
   memcpy(destination + ID_OFFSET, &(source->id), ID_SIZE);
-  printf("after5-----%d\n",*(leaf_node_num_cells(node)));
+  // printf("after5-----%d\n",*(leaf_node_num_cells(node)));
 
   // memcpy(destination + USERNAME_OFFSET, &(source->username), USERNAME_SIZE);
   // memcpy(destination + EMAIL_OFFSET, &(source->email), EMAIL_SIZE);
   strncpy((char*)destination + USERNAME_OFFSET, source->username, USERNAME_SIZE);
-  printf("after6-----%d\n",*(leaf_node_num_cells(node)));
+  // printf("after6-----%d\n",*(leaf_node_num_cells(node)));
 
   strncpy((char*)destination + EMAIL_OFFSET, source->email, EMAIL_SIZE);
-  printf("after7-----%d\n",*(leaf_node_num_cells(node)));
+  // printf("after7-----%d\n",*(leaf_node_num_cells(node)));
 
 }
 
@@ -39,10 +39,10 @@ void* get_page(Pager* pager, uint32_t page_num) {
 
   if (pager->pages[page_num] == NULL) {
     // Cache miss. Allocate memory and load from file.
-    printf("---in get page---null-malloc------\n");
+    // printf("---in get page---null-malloc------\n");
     void* page = malloc(PAGE_SIZE);
     uint32_t num_pages = pager->file_length / PAGE_SIZE;
-    printf("----in get page-----num_pages:%d------\n",num_pages);
+    // printf("----in get page-----num_pages:%d------\n",num_pages);
     // We might save a partial page at the end of the file
     if (pager->file_length % PAGE_SIZE) {
       num_pages += 1;
@@ -63,7 +63,7 @@ void* get_page(Pager* pager, uint32_t page_num) {
       pager->num_pages = page_num + 1;
     }
   }
-  printf("--------in get page------before-return---node:%d--\n",*leaf_node_num_cells(pager->pages[page_num]));
+  // printf("--------in get page------before-return---node:%d--\n",*leaf_node_num_cells(pager->pages[page_num]));
   return pager->pages[page_num];
 }
 
@@ -109,23 +109,23 @@ void leaf_node_insert(Cursor* cursor, uint32_t key, Row* value) {
   }
 
   *(leaf_node_num_cells(node)) += 1;
-  printf("after1-----%d\n",*(leaf_node_num_cells(node)));
-  printf("-------------------\n\n");
+  // printf("after1-----%d\n",*(leaf_node_num_cells(node)));
+  // printf("-------------------\n\n");
   *(leaf_node_key(node, cursor->cell_num)) = key;
-  printf("after2-----%d\n",*(leaf_node_num_cells(node)));
-  printf("-------------------\n\n");
+  // printf("after2-----%d\n",*(leaf_node_num_cells(node)));
+  // printf("-------------------\n\n");
   void * temp = leaf_node_value(node, cursor->cell_num);
-  printf("after3-----%d\n",*(leaf_node_num_cells(node)));
-  printf("-------------------\n\n");
-  serialize_row(value, temp,node);
-  printf("-------------------\n\n");
-  printf("after8-----%d\n",*(leaf_node_num_cells(node)));
+  // printf("after3-----%d\n",*(leaf_node_num_cells(node)));
+  // printf("-------------------\n\n");
+  // serialize_row(value, temp,node);
+  // printf("-------------------\n\n");
+  // printf("after8-----%d\n",*(leaf_node_num_cells(node)));
 }
 
 
 ExecuteResult execute_insert(Statement* statement, Table* table) {
   void* node = get_page(table->pager, table->root_page_num);
-  printf("exe-------%d\n",*leaf_node_num_cells(node));
+  // printf("exe-------%d\n",*leaf_node_num_cells(node));
   if ((*leaf_node_num_cells(node) >= LEAF_NODE_MAX_CELLS)) {
      return EXECUTE_TABLE_FULL;
    }
@@ -133,7 +133,7 @@ ExecuteResult execute_insert(Statement* statement, Table* table) {
   Row* row_to_insert = &(statement->row_to_insert);
   Cursor* cursor = table_end(table);
   leaf_node_insert(cursor, row_to_insert->id, row_to_insert);
-  printf("----------after leaf_node_insert : node:%d",*leaf_node_num_cells(get_page(cursor->table->pager, cursor->page_num)));
+  // printf("----------after leaf_node_insert : node:%d",*leaf_node_num_cells(get_page(cursor->table->pager, cursor->page_num)));
   free(cursor);
 
   return EXECUTE_SUCCESS;
